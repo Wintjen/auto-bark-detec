@@ -188,6 +188,11 @@ select {
   margin-bottom: 0.5rem;
 }
 
+.instructions ul {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
 .ai-description {
   font-size: 0.9rem;
   color: #6c757d;
@@ -211,6 +216,11 @@ select {
   font-size: 0.95rem;
   margin-bottom: 0.8rem;
   line-height: 1.5;
+}
+
+.ai-info ol {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 @keyframes pulse {
