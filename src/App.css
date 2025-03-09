@@ -188,6 +188,31 @@ select {
   margin-bottom: 0.5rem;
 }
 
+.ai-description {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-style: italic;
+  margin: 0;
+}
+
+.ai-info {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.ai-info h3 {
+  color: #3a86ff;
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+
+.ai-info p {
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
 @keyframes pulse {
   0% {
     opacity: 0.6;

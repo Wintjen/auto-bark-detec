@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import BarkDetector from './components/BarkDetector';
+import BarkAIDetector from './components/BarkAIDetector';
 import AudioPlayer from './components/AudioPlayer';
 import './components/BarkDetector.css';
 
@@ -27,6 +28,7 @@ function App() {
   const [barkCount, setBarkCount] = useState<number>(0);
   const [lastBarkTime, setLastBarkTime] = useState<string>('Never');
   const [lastThresholdData, setLastThresholdData] = useState<ThresholdData | null>(null);
+  const [useAI, setUseAI] = useState<boolean>(false);
 
   // Function to handle bark detection - using useCallback to ensure stable reference
   const handleBarkDetected = useCallback((thresholdData: ThresholdData) => {
@@ -135,6 +137,21 @@ function App() {
           </div>
           
           <div className="control-group">
+            <label htmlFor="ai-toggle">
+              <input
+                id="ai-toggle"
+                type="checkbox"
+                checked={useAI}
+                onChange={() => setUseAI(!useAI)}
+              />
+              Use AI Detection {useAI ? '(Enabled)' : '(Disabled)'}
+            </label>
+            <p className="ai-description">
+              AI detection uses machine learning to identify sounds. It's experimental and may not work perfectly for dog barks.
+            </p>
+          </div>
+          
+          <div className="control-group">
             <label htmlFor="default-audio">Select Response Sound:</label>
             <select 
               id="default-audio" 
@@ -211,11 +228,19 @@ function App() {
           </div>
         </div>
         
-        <BarkDetector
-          onBarkDetected={handleBarkDetected}
-          sensitivity={testMode ? sensitivity * 0.5 : sensitivity}
-          isListening={isListening}
-        />
+        {useAI ? (
+          <BarkAIDetector
+            onBarkDetected={handleBarkDetected}
+            sensitivity={sensitivity}
+            isListening={isListening}
+          />
+        ) : (
+          <BarkDetector
+            onBarkDetected={handleBarkDetected}
+            sensitivity={testMode ? sensitivity * 0.5 : sensitivity}
+            isListening={isListening}
+          />
+        )}
         
         <AudioPlayer
           audioSrc={selectedAudio}
@@ -228,6 +253,7 @@ function App() {
           <ol>
             <li>Select one of the default sounds or upload your own</li>
             <li>Test the sound using the "Test Sound" button</li>
+            <li>Choose between standard detection or AI-based detection</li>
             <li>Click "Start Listening" to begin detecting barks</li>
             <li>Adjust the sensitivity slider if needed</li>
             <li>When your dog barks, the app will play the selected sound</li>
@@ -235,6 +261,12 @@ function App() {
           </ol>
           <p><strong>Note:</strong> You must grant microphone permissions for this app to work.</p>
           <p><strong>Troubleshooting:</strong> If detection isn't working well, try enabling Test Mode for more sensitive detection.</p>
+          
+          <div className="ai-info">
+            <h3>About AI Detection</h3>
+            <p>The AI detection uses TensorFlow.js with a pre-trained speech commands model. This model is trained to recognize common words, not specifically dog barks.</p>
+            <p>For demonstration purposes, it will trigger on sounds that might be similar to barks. For a production app, you would train a custom model specifically on dog bark sounds.</p>
+          </div>
         </div>
       </main>
     </div>

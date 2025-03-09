@@ -143,4 +143,38 @@
   background: #3a86ff;
   cursor: pointer;
   border: none;
+}
+
+/* AI Detector Styles */
+.bark-ai-detector {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f0f7ff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 4px solid #3a86ff;
+}
+
+.ai-debug-info {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.ai-debug-info p {
+  margin: 5px 0;
+}
+
+.ai-note {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-style: italic;
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #ced4da;
 } 
