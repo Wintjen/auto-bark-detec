@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .App-logo {
@@ -14,14 +15,206 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #3a86ff;
+  padding: 2rem;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.App-header p {
+  margin: 0.5rem 0 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.App-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.controls {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-weight: 500;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 0.5rem;
+}
+
+input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+input[type="file"] {
+  padding: 0.5rem;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  width: 100%;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  background-color: white;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.test-audio-button, .simulate-button {
+  padding: 0.5rem 1rem;
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.test-audio-button {
+  background-color: #3a86ff;
+}
+
+.test-audio-button:hover {
+  background-color: #2a75e0;
+}
+
+.simulate-button {
+  background-color: #ff6b6b;
+}
+
+.simulate-button:hover {
+  background-color: #e05c5c;
+}
+
+.playing-status {
+  color: #3a86ff;
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+.stats-panel {
+  background-color: #e9ecef;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.stats-panel h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #343a40;
+}
+
+.stats-panel p {
+  margin: 0.5rem 0;
+}
+
+.threshold-data {
+  background-color: #fff;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-top: 0.8rem;
+  border-left: 4px solid #3a86ff;
+}
+
+.threshold-data p {
+  margin: 0.3rem 0;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.threshold-data p:first-child {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.instructions h2 {
+  margin-top: 0;
+  color: #3a86ff;
+}
+
+.instructions ol {
+  padding-left: 1.5rem;
+}
+
+.instructions li {
+  margin-bottom: 0.5rem;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Visual feedback for bark detection */
+.bark-detected .App-header {
+  animation: flash 0.5s;
+}
+
+@keyframes flash {
+  0% {
+    background-color: #3a86ff;
+  }
+  50% {
+    background-color: #ff6b6b;
+  }
+  100% {
+    background-color: #3a86ff;
+  }
 }
 
 .App-link {

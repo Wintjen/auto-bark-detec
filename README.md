@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# Dog Bark Detector
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React web application that detects dog barks and plays a sound in response. This can be useful for training your dog or alerting you when your dog barks.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Real-time dog bark detection using audio analysis
+- Customizable sensitivity to adjust for different environments
+- Option to upload your own response sound
+- Visual feedback with volume meter
+- Simple and intuitive user interface
 
-### `npm start`
+## How It Works
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The application uses your device's microphone to listen for sounds. It analyzes the audio in real-time using the Meyda audio processing library to detect characteristics typical of dog barks:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Volume (amplitude)
+2. Spectral flatness (how tonal vs. noisy the sound is)
+3. Spectral centroid (the "brightness" or frequency distribution)
 
-### `npm test`
+When a bark is detected, the app plays your selected audio response.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js and npm installed on your computer
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- Microphone access
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/dog-bark-detector.git
+   cd dog-bark-detector
+   ```
 
-### `npm run eject`
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. Start the development server:
+   ```
+   npm start
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Adding a Response Sound
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can add a default response sound by placing an MP3 file named `response.mp3` in the `public/audio/` directory.
 
-## Learn More
+Alternatively, you can upload any audio file through the app's interface.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Grant microphone permissions when prompted
+2. (Optional) Upload a custom response sound
+3. Click "Start Listening" to begin bark detection
+4. Adjust the sensitivity slider if needed:
+   - Higher sensitivity: Detects more sounds as barks (may have false positives)
+   - Lower sensitivity: More selective about what counts as a bark
+5. When your dog barks, the app will play the response sound
+
+## Privacy
+
+This application processes all audio locally in your browser. No audio data is sent to any server or stored permanently.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Meyda](https://github.com/meyda/meyda) - Audio feature extraction library
