@@ -7,9 +7,13 @@ import './components/BarkDetector.css';
 // Default audio options with verified working URLs
 const DEFAULT_AUDIO_OPTIONS = [
   { name: 'Beep Sound', path: 'https://assets.coderrocketfuel.com/pomodoro-times-up.mp3' },
-  { name: 'Bell Sound', path: 'https://assets.coderrocketfuel.com/notification-sound.mp3' },
-  { name: 'Alert Sound', path: 'https://www.soundjay.com/buttons/sounds/button-09.mp3' }
 ];
+
+// Interface for audio files
+interface AudioFile {
+  name: string;
+  path: string;
+}
 
 interface ThresholdData {
   volume: number;
@@ -19,14 +23,16 @@ interface ThresholdData {
 
 function App() {
   const [isListening, setIsListening] = useState<boolean>(false);
-  const [sensitivity, setSensitivity] = useState<number>(0.7);
+  const [sensitivity, setSensitivity] = useState<number>(1);
   const [playAudio, setPlayAudio] = useState<boolean>(false);
+  const [audioFiles, setAudioFiles] = useState<AudioFile[]>(DEFAULT_AUDIO_OPTIONS);
   const [selectedAudio, setSelectedAudio] = useState<string>(DEFAULT_AUDIO_OPTIONS[0].path);
-  const [uploadedAudio, setUploadedAudio] = useState<string | null>(null);
-  const [testMode, setTestMode] = useState<boolean>(true); // Default to test mode for easier testing
+  const [testMode, setTestMode] = useState<boolean>(false); // Default to test mode for easier testing
   const [barkCount, setBarkCount] = useState<number>(0);
   const [lastBarkTime, setLastBarkTime] = useState<string>('Never');
   const [lastThresholdData, setLastThresholdData] = useState<ThresholdData | null>(null);
+  const [randomPlayback, setRandomPlayback] = useState<boolean>(true);
+  const [customAudioName, setCustomAudioName] = useState<string>('');
 
   // Function to handle bark detection - using useCallback to ensure stable reference
   const handleBarkDetected = useCallback((thresholdData: ThresholdData) => {
@@ -37,6 +43,12 @@ function App() {
     setLastBarkTime(thresholdData.time);
     setLastThresholdData(thresholdData);
     
+    // If random playback is enabled and we have multiple audio files, select a random one
+    if (randomPlayback && audioFiles.length > 0) {
+      const randomIndex = Math.floor(Math.random() * audioFiles.length);
+      setSelectedAudio(audioFiles[randomIndex].path);
+    }
+    
     // Play the audio
     setPlayAudio(true);
     
@@ -45,7 +57,7 @@ function App() {
     setTimeout(() => {
       document.body.classList.remove('bark-detected');
     }, 500);
-  }, []);
+  }, [randomPlayback, audioFiles]);
 
   // Function to handle audio playback completion
   const handleAudioEnded = useCallback(() => {
@@ -59,8 +71,13 @@ function App() {
     if (file) {
       console.log('Audio file uploaded:', file.name);
       const audioUrl = URL.createObjectURL(file);
-      setUploadedAudio(audioUrl);
+      const fileName = customAudioName || file.name;
+      
+      // Add the new audio file to the list
+      const newAudioFile = { name: fileName, path: audioUrl };
+      setAudioFiles(prev => [...prev, newAudioFile]);
       setSelectedAudio(audioUrl);
+      setCustomAudioName(''); // Reset the custom name field
     }
   };
 
@@ -71,9 +88,29 @@ function App() {
     setSelectedAudio(selectedPath);
   };
 
+  // Function to remove an audio file
+  const handleRemoveAudio = (path: string) => {
+    setAudioFiles(prev => prev.filter(audio => audio.path !== path));
+    
+    // If the removed audio was selected, select the first available one
+    if (selectedAudio === path && audioFiles.length > 1) {
+      const remainingAudios = audioFiles.filter(audio => audio.path !== path);
+      if (remainingAudios.length > 0) {
+        setSelectedAudio(remainingAudios[0].path);
+      }
+    }
+  };
+
   // Function to test audio playback
   const handleTestAudio = () => {
     console.log('Testing audio playback');
+    
+    // If random playback is enabled, select a random audio file for testing
+    if (randomPlayback && audioFiles.length > 0) {
+      const randomIndex = Math.floor(Math.random() * audioFiles.length);
+      setSelectedAudio(audioFiles[randomIndex].path);
+    }
+    
     setPlayAudio(true);
   };
 
@@ -135,29 +172,60 @@ function App() {
           </div>
           
           <div className="control-group">
-            <label htmlFor="default-audio">Select Response Sound:</label>
-            <select 
-              id="default-audio" 
-              value={selectedAudio}
-              onChange={handleDefaultAudioChange}
-            >
-              {DEFAULT_AUDIO_OPTIONS.map((option, index) => (
-                <option key={index} value={option.path}>
-                  {option.name}
-                </option>
+            <label htmlFor="random-playback-toggle">
+              <input
+                id="random-playback-toggle"
+                type="checkbox"
+                checked={randomPlayback}
+                onChange={() => setRandomPlayback(!randomPlayback)}
+              />
+              Random Sound Selection
+            </label>
+            <p className="help-text">
+              {randomPlayback 
+                ? "A random sound will be played each time a bark is detected" 
+                : "The selected sound will be played each time a bark is detected"}
+            </p>
+          </div>
+          
+          <div className="control-group">
+            <label htmlFor="default-audio">Available Sounds:</label>
+            <div className="audio-list">
+              {audioFiles.map((audio, index) => (
+                <div key={index} className="audio-item">
+                  <input
+                    type="radio"
+                    id={`audio-${index}`}
+                    name="audio-selection"
+                    checked={selectedAudio === audio.path}
+                    onChange={() => setSelectedAudio(audio.path)}
+                  />
+                  <label htmlFor={`audio-${index}`}>{audio.name}</label>
+                  <button 
+                    className="remove-audio-button"
+                    onClick={() => handleRemoveAudio(audio.path)}
+                    disabled={audioFiles.length <= 1} // Prevent removing the last audio file
+                  >
+                    Remove
+                  </button>
+                  <button 
+                    className="test-audio-button small" 
+                    onClick={() => {
+                      setSelectedAudio(audio.path);
+                      setPlayAudio(true);
+                    }}
+                  >
+                    Test
+                  </button>
+                </div>
               ))}
-              {uploadedAudio && (
-                <option value={uploadedAudio}>
-                  Uploaded Audio
-                </option>
-              )}
-            </select>
+            </div>
             <div className="button-group">
               <button 
                 className="test-audio-button" 
                 onClick={handleTestAudio}
               >
-                Test Sound
+                Test {randomPlayback ? 'Random' : 'Selected'} Sound
               </button>
               <button 
                 className="simulate-button" 
@@ -169,13 +237,24 @@ function App() {
           </div>
           
           <div className="control-group">
-            <label htmlFor="audio-upload">Or Upload Your Own Sound:</label>
+            <label htmlFor="audio-name">Custom Sound Name:</label>
+            <input
+              id="audio-name"
+              type="text"
+              value={customAudioName}
+              onChange={(e) => setCustomAudioName(e.target.value)}
+              placeholder="Enter a name for your sound"
+            />
+            <label htmlFor="audio-upload">Upload Sound File:</label>
             <input
               id="audio-upload"
               type="file"
               accept="audio/*"
               onChange={handleAudioUpload}
             />
+            <p className="help-text">
+              Upload MP3, WAV, or other audio files to use as response sounds
+            </p>
           </div>
           
           <div className="control-group">
@@ -183,18 +262,6 @@ function App() {
               <strong>Status:</strong> {isListening ? 'Listening for barks' : 'Not listening'}
             </p>
             {playAudio && <p className="playing-status">Playing response sound...</p>}
-          </div>
-
-          <div className="control-group">
-            <label htmlFor="test-mode-toggle">
-              <input
-                id="test-mode-toggle"
-                type="checkbox"
-                checked={testMode}
-                onChange={() => setTestMode(!testMode)}
-              />
-              Test Mode (Lower thresholds for easier testing)
-            </label>
           </div>
           
           <div className="stats-panel">
@@ -226,15 +293,16 @@ function App() {
         <div className="instructions">
           <h2>How to use:</h2>
           <ol>
-            <li>Select one of the default sounds or upload your own</li>
-            <li>Test the sound using the "Test Sound" button</li>
+            <li>Add your own sounds by uploading audio files</li>
+            <li>Enable "Random Sound Selection" to play a random sound when a bark is detected</li>
+            <li>Test your sounds using the "Test Sound" button</li>
             <li>Click "Start Listening" to begin detecting barks</li>
             <li>Adjust the sensitivity slider if needed</li>
-            <li>When your dog barks, the app will play the selected sound</li>
+            <li>When your dog barks, the app will play the selected or a random sound</li>
             <li>Use "Simulate Bark" button to test the full detection-response cycle</li>
           </ol>
           <p><strong>Note:</strong> You must grant microphone permissions for this app to work.</p>
-          <p><strong>Troubleshooting:</strong> If detection isn't working well, try enabling Test Mode for more sensitive detection.</p>
+          <p><strong>Troubleshooting:</strong> If detection isn't working well, try adjusting the sensitivity.</p>
         </div>
       </main>
     </div>

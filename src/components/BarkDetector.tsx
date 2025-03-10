@@ -13,7 +13,7 @@ interface BarkDetectorProps {
 
 const BarkDetector: React.FC<BarkDetectorProps> = ({ 
   onBarkDetected, 
-  sensitivity = 0.7, 
+  sensitivity = 1.0, 
   isListening 
 }) => {
   const [isSetup, setIsSetup] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const BarkDetector: React.FC<BarkDetectorProps> = ({
   }, [onBarkDetected]);
   
   // Threshold values for bark detection - lower thresholds for easier detection
-  const VOLUME_THRESHOLD = 0.55 * sensitivity;
+  const VOLUME_THRESHOLD = 0.3 * sensitivity;
   const SPECTRAL_FLATNESS_THRESHOLD = 0.7 * (1 - sensitivity);
   const SPECTRAL_CENTROID_MIN = 500 * sensitivity;
   const SPECTRAL_CENTROID_MAX = 6000 * sensitivity;
