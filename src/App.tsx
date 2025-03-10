@@ -33,6 +33,26 @@ function App() {
   const [lastThresholdData, setLastThresholdData] = useState<ThresholdData | null>(null);
   const [randomPlayback, setRandomPlayback] = useState<boolean>(true);
   const [customAudioName, setCustomAudioName] = useState<string>('');
+  const [showInstructions, setShowInstructions] = useState<boolean>(true);
+
+  // Check local storage for instructions visibility on component mount
+  useEffect(() => {
+    const instructionsShown = localStorage.getItem('instructionsShown');
+    if (instructionsShown === 'false') {
+      setShowInstructions(false);
+    }
+  }, []);
+
+  // Function to handle closing the instructions modal
+  const handleCloseInstructions = () => {
+    setShowInstructions(false);
+    localStorage.setItem('instructionsShown', 'false');
+  };
+
+  // Function to handle reopening the instructions modal
+  const handleShowInstructions = () => {
+    setShowInstructions(true);
+  };
 
   // Function to handle bark detection - using useCallback to ensure stable reference
   const handleBarkDetected = useCallback((thresholdData: ThresholdData) => {
@@ -290,20 +310,44 @@ function App() {
           onPlayEnd={handleAudioEnded}
         />
         
-        <div className="instructions">
-          <h2>How to use:</h2>
-          <ol>
-            <li>Add your own sounds by uploading audio files</li>
-            <li>Enable "Random Sound Selection" to play a random sound when a bark is detected</li>
-            <li>Test your sounds using the "Test Sound" button</li>
-            <li>Click "Start Listening" to begin detecting barks</li>
-            <li>Adjust the sensitivity slider if needed</li>
-            <li>When your dog barks, the app will play the selected or a random sound</li>
-            <li>Use "Simulate Bark" button to test the full detection-response cycle</li>
-          </ol>
-          <p><strong>Note:</strong> You must grant microphone permissions for this app to work.</p>
-          <p><strong>Troubleshooting:</strong> If detection isn't working well, try adjusting the sensitivity.</p>
-        </div>
+        {/* Instructions Modal */}
+        {showInstructions && (
+          <div className="instructions-modal-overlay">
+            <div className="instructions-modal">
+              <div className="instructions-modal-header">
+                <h2>How to Use</h2>
+                <button 
+                  className="close-button"
+                  onClick={handleCloseInstructions}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="instructions-modal-content">
+                <ol>
+                  <li>Add your own sounds by uploading audio files</li>
+                  <li>Enable "Random Sound Selection" to play a random sound when a bark is detected</li>
+                  <li>Test your sounds using the "Test Sound" button</li>
+                  <li>Click "Start Listening" to begin detecting barks</li>
+                  <li>Adjust the sensitivity slider if needed</li>
+                  <li>When your dog barks, the app will play the selected or a random sound</li>
+                  <li>Use "Simulate Bark" button to test the full detection-response cycle</li>
+                </ol>
+                <p><strong>Note:</strong> You must grant microphone permissions for this app to work.</p>
+                <p><strong>Troubleshooting:</strong> If detection isn't working well, try adjusting the sensitivity.</p>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Help Button */}
+        <button 
+          className="help-button"
+          onClick={handleShowInstructions}
+          title="Show Instructions"
+        >
+          ?
+        </button>
       </main>
     </div>
   );

@@ -166,40 +166,6 @@ select {
   margin-bottom: 0.5rem;
 }
 
-.instructions {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin-top: 2rem;
-  text-align: left;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.instructions h2 {
-  margin-top: 0;
-  color: #3a86ff;
-}
-
-.instructions ol {
-  padding-left: 1.5rem;
-}
-
-.instructions li {
-  margin-bottom: 0.5rem;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
 /* Visual feedback for bark detection */
 .bark-detected .App-header {
   animation: flash 0.5s;
@@ -301,4 +267,136 @@ input[type="text"] {
   border: 1px solid #ced4da;
   width: 100%;
   margin-bottom: 0.8rem;
+}
+
+/* Instructions Modal Styles */
+.instructions-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.instructions-modal {
+  background-color: white;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.instructions-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #3a86ff;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.instructions-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  transition: transform 0.2s;
+}
+
+.close-button:hover {
+  transform: scale(1.2);
+}
+
+.instructions-modal-content {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.instructions-modal-content ol {
+  padding-left: 1.5rem;
+  margin-top: 0;
+}
+
+.instructions-modal-content li {
+  margin-bottom: 0.8rem;
+}
+
+/* Help Button */
+.help-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background-color: #3a86ff;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.2s;
+  z-index: 900;
+}
+
+.help-button:hover {
+  transform: scale(1.1);
+  background-color: #2a75e0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
